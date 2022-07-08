@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>自动空头管理</h2>    
+    <input value="链接" type="button" onclick="matemask.connet()" id="_connet"> </br>
+    <p><input type="button" value="授权" onclick="apro()"><span> 需要授权一次</span></p>
+    <p>数量:<input type="text" id="_num"><input type="button" value="数量修改" onclick="numset()"></p>
+    <span style="font-size: 13px">php精度是9   1个币为 1000000000 后面加9个0</span>
+    <p>合约:<input type="text" id="_adr"><input type="button" value="合约修改" onclick="setadr()"></p>
+    <p>当前token合约: <span id="curren_adr"></span> </p>
+    <h3>领币：</h3>
+    <p>领币合约 0xF90e84975fE1F26DB5beb6E5E8bbF5B7c0140DD8</p>
+    <p>领币代码 0x4e71d92d</p>
+
+    <script src="./web3/web3.min.js"></script>
+    <script>
+
+matemask = {
+        m_account: '',
+		m_xcs: true,
+        connet: () => {
+            matemask.m_xcs = false
+            // var mate = window.ethereum;
+            if(typeof window.ethereum === 'undefined'){
+                alert('未安装钱包')
+            }
+            try{
+                window.ethereum.enable()
+            }catch(err){
+                alert('未通过')
+            }
+            if(!window.ethereum.isConnected()){
+                document.getElementById('_connet').value = "链接"
+                matemask.m_xcs = true
+            }else{
+                window.web3 = new Web3(window.ethereum);
+                // console.log(ethereum.selectedAddress)
+                matemask.m_account = ethereum.selectedAddress;
+                matemask.m_xcs = true
+                document.getElementById('_connet').value = ethereum.selectedAddress.slice(0,6)+ '....'  +ethereum.selectedAddress.slice(-6)
+                document.getElementById('_connet').onclick = ""
+                
+            }} ,
+        start: () => {
+            setInterval(
+            function(){
+               
+                if(window.ethereum){
+                if(matemask.m_xcs && ethereum.selectedAddress != matemask.m_account){
+                matemask.connet()}}
+            },1000 )}}
+    matemask.start()
+    
+    qfadr = "0xF90e84975fE1F26DB5beb6E5E8bbF5B7c0140DD8"
+    aabi = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "airDropAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "airToken",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "changeAirDropAmount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			}
+		],
+		"name": "changeAirToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			}
+		],
+		"name": "isDone",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "takeOutEth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "takeOutToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+    function getContract(){
+        _contract = new web3.eth.Contract(aabi,qfadr)
+        return _contract
+    }
+
+    function getToken(){
+        _contract = getContract()
+        _contract.methods.airToken().call().then( res=>{
+            //console.log(res)
+            document.getElementById('curren_adr').innerHTML = res
+        } )
+    }
+
+    function  transationstate(haxi){
+           web3.eth.getTransactionReceipt(haxi).then(function(result){
+        
+                if(result == null){
+                    setTimeout( function(){ transationstate(haxi)},1000)
+                }else{
+                result.status ? alert('成功') : alert('失败')}
+            });
+        }
+
+    setInterval(
+            function(){               
+                getToken()
+            },3000 )
+
+
+    function apro(token){
+            
+        var   abi = [{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],
+                    "name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],
+                    "stateMutability":"nonpayable","type":"function"}]
+
+        _contract = getContract()
+        _contract.methods.airToken().call().then( res=>{
+
+            _contract2 = new web3.eth.Contract(abi,res)        
+            amount = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+            
+            _contract2.methods.approve(qfadr,amount).send({from:ethereum.selectedAddress},(err,res)=>{
+                err ? alert('失败') : transationstate(res)                
+            }).then(console.log)
+        })
+    }
+
+
+
+    function numset(){
+        num=document.getElementById('_num').value
+        
+        _contract = getContract()
+        _contract.methods.changeAirDropAmount(num).send({from:ethereum.selectedAddress},(err,res)=>{
+                err ? alert('失败') : transationstate(res)                
+            }).then(console.log)
+    }
+
+    function setadr(){
+        adr=document.getElementById('_adr').value
+        
+        _contract = getContract()
+        _contract.methods.changeAirToken(adr).send({from:ethereum.selectedAddress},(err,res)=>{
+                err ? alert('失败') : transationstate(res)                
+            }).then(console.log)
+    }
+
+    </script>
+
+</body>
+</html>
